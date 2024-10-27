@@ -18,11 +18,9 @@ WebAPI приложение загружает данные из файла `inp
    ```bash
    git clone [неправильный URL удален]
    ```
-2. ** **
-   ```bash
-   dotnet restore
-   ```
-3. ** **
+2. **Запустить проект**
    ```bash
    dotnet run
    ```
+Написаны простые тесты для модели `Order`
+Файл конфигурации - `SortOrders.API/appsettings.json`
