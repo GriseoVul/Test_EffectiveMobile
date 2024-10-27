@@ -1,11 +1,10 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using SortOrders.API.Models;
-using SortOrders.API.Repos;
 using Xunit;
 namespace SortOrders.Tests;
 
-public class SortOrders_OrderRepo
+public class SortOrders_Orde
 {
     [Fact]
     public void Test1_CreationDefaults()
@@ -19,7 +18,6 @@ public class SortOrders_OrderRepo
     [Fact]
     public void Test2_Valid_values()
     {
-        bool result = true;
         var Order = new Order
         {
             Id = 2,
@@ -27,15 +25,8 @@ public class SortOrders_OrderRepo
             District = "testDistrict",
             DeliveryTime = DateTime.Now
         };
-        try
-        {
-            Order.Validate();
-        }
-        catch(Exception)
-        {
-            result = false;
-        }
-        Assert.True(result, "Valid values");
+        var exc = Record.Exception(() => Order.Validate());
+        Assert.Null(exc);
     }
     [Fact]
     public void Test3_Invalid_value_Weight()
@@ -49,5 +40,18 @@ public class SortOrders_OrderRepo
         };
         
         Assert.Throws<ValidationException>(() => Order.Validate());
+    }
+    [Fact]
+    public void Test4_ValidCSV()
+    {
+        var Order = new Order();
+        var exc = Record.Exception( () => Order.FromCsv("1,4.5,TestDistrict,10.10.2024 12:20:00") );
+        Assert.Null(exc);
+    }
+    [Fact]
+    public void Test5_InvalidCSV()
+    {
+        var Order = new Order();
+        Assert.Throws<FormatException>(() =>  Order.FromCsv(""));
     }
 }
